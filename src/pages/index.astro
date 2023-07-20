@@ -1,0 +1,66 @@
+---
+import Todo from "../components/Todo.svelte";
+
+const res = await fetch("https://random-data-api.com/api/v2/users?size=50");
+const data: any[] = await res.json();
+
+function ssnDisplay(ssn: string) {
+	const a = ssn.slice(0, 3);
+	const b = ssn.slice(3, 5);
+	const c = ssn.slice(5);
+	return `${a}-${b}-${c}`;
+}
+---
+
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width" />
+		<meta name="generator" content={Astro.generator} />
+		<title>Maniac</title>
+	</head>
+	<body class="min-h-screen bg-slate-800 text-slate-300">
+		<div
+			class="grid max-w-7xl mx-auto grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 p-3"
+		>
+			{
+				data.map(
+					({
+						first_name: fn,
+						last_name: ln,
+						avatar,
+						id,
+						uid,
+						password,
+						username,
+						email,
+						gender,
+						phone_number,
+						social_insurance_number: ssn,
+						date_of_birth,
+						employment,
+						address: { city, state, zip_code: zip, street_address },
+						credit_card,
+						subscription,
+					}) => (
+						<div class="px-2 py-1 rounded border border-slate-600 shadow">
+							<div
+								class="flex align-bottom justify-stretch"
+								title={username}
+							>
+								{ln}, {fn}
+								<div class=" grow my-auto text-xs flex justify-end">
+									{ssnDisplay(ssn)}
+								</div>
+							</div>
+							<div>
+								{street_address} - {city}, {state} {zip}
+							</div>
+						</div>
+					)
+				)
+			}
+		</div>
+	</body>
+</html>
